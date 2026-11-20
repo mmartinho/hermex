@@ -42,6 +42,6 @@ O schema é **code-first**: a API gera `apps/api/src/schema.gql` ao subir. O fro
 - Next 16: `proxy.ts` substitui `middleware.ts`, e **Cache Components está ativo** — leituras de sessão/dados dinâmicos devem ficar sob `<Suspense>`.
 
 ## Restrições de versão (não "atualizar" sem checar)
-- Nest CLI 12 e GraphQL Codegen CLI > 7 quebram no Node 22.13 (`ERR_REQUIRE_CYCLE_MODULE`); por isso Nest 11 e Codegen CLI 7 + client-preset 5.
+- **Nest 11** e **GraphQL Codegen CLI 7 + client-preset 5** são mantidos por decisão do projeto. O motivo original (Nest CLI 12 e Codegen CLI > 7 quebravam no Node 22.13 com `ERR_REQUIRE_CYCLE_MODULE`) deixou de existir com o Node 24 (Nest CLI 12 e Codegen CLI 8 iniciam normalmente nele), mas a migração para Nest 12 / Codegen 8 não foi feita nem validada — não atualizar sem pedido explícito.
 - Prisma fixado em 7.10.1 (o `latest` do npm era um RC do Prisma 8); usa `prisma.config.ts` e adapter `pg`.
 - `bcryptjs` em vez de `bcrypt` (evita build nativo no Windows). Scripts de build de dependências são controlados por `allowBuilds` em `pnpm-workspace.yaml`.
