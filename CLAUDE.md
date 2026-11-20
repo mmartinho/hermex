@@ -10,7 +10,7 @@ Hermex é uma locadora de veículos. Monorepo PNPM (`pnpm-workspace.yaml`) com t
 - `apps/api` — Nest.js 11 (GraphQL code-first/Apollo, Prisma 7 + `@prisma/adapter-pg`, JWT/Passport), Postgres 17 via `docker-compose.yaml`
 - `packages/shared` — `@hermex/shared`, tipos/constantes comuns; consumido a partir de `dist/`, então **precisa ser compilado** (`pnpm build:shared`) após alterações. `pnpm dev` e `postinstall` já fazem isso.
 
-Requer Node ≥ 22.12 e pnpm 12. Os planos de implementação ficam em `plans/` e o PRD em `PRD.md`. Documentação em português; código e cabeçalhos de arquivo seguem o formato de comentários do CLAUDE.md global do usuário.
+Requer pnpm 12. O Node 24 é fixado por projeto via `devEngines.runtime` no `package.json` raiz: o pnpm o baixa no `pnpm install` e o usa em todos os scripts `pnpm ...`, sem tocar no Node global (`node` digitado direto no terminal continua sendo o global). Os planos de implementação ficam em `plans/` e o PRD em `PRD.md`. Documentação em português; código e cabeçalhos de arquivo seguem o formato de comentários do CLAUDE.md global do usuário.
 
 ## Comandos (rodar na raiz)
 

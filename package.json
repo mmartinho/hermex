@@ -5,7 +5,14 @@
   "description": "Hermex - locadora de veículos (monorepo PNPM: web Next.js + api Nest.js)",
   "packageManager": "pnpm@12.8.1",
   "engines": {
-    "node": ">=22.12"
+    "node": ">=24"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "^24.0.0",
+      "onFail": "download"
+    }
   },
   "scripts": {
     "postinstall": "pnpm build:shared && pnpm db:generate",
