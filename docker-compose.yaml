@@ -1,0 +1,28 @@
+# Autor(es): Marcus Antonio Martinho Silva <marcus.antonio.martinho.silva@gmail.com>, Claude Code
+# Data Criação: 2026-11-19
+# Data Atualização: 2026-11-19
+# Descrição: Infraestrutura local do Hermex. Sobe o banco Postgres usado pela API,
+#   com volume nomeado para persistir os dados entre reinicializações do container.
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: hermex-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-hermex}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-hermex}
+      POSTGRES_DB: ${POSTGRES_DB:-hermex}
+    ports:
+      - '${POSTGRES_PORT:-5432}:5432'
+    volumes:
+      - hermex_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  hermex_pgdata:
+    name: hermex_pgdata

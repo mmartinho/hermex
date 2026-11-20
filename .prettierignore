@@ -1,0 +1,12 @@
+node_modules
+pnpm-lock.yaml
+dist
+.next
+coverage
+apps/api/src/generated
+apps/api/src/schema.gql
+apps/web/src/gql
+plans
+*.md
+next-env.d.ts
+apps/web/public

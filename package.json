@@ -1,0 +1,43 @@
+{
+  "name": "hermex",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Hermex - locadora de veículos (monorepo PNPM: web Next.js + api Nest.js)",
+  "packageManager": "pnpm@12.8.1",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "postinstall": "pnpm build:shared && pnpm db:generate",
+    "dev": "pnpm build:shared && pnpm --parallel --filter web --filter api dev",
+    "dev:web": "pnpm --filter web dev",
+    "dev:api": "pnpm --filter api dev",
+    "build": "pnpm build:shared && pnpm build:api && pnpm build:web",
+    "build:shared": "pnpm --filter @hermex/shared build",
+    "build:api": "pnpm --filter api build",
+    "build:web": "pnpm --filter web build",
+    "start:api": "pnpm --filter api start:prod",
+    "start:web": "pnpm --filter web start",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "test:api": "pnpm --filter api test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f postgres",
+    "db:generate": "pnpm --filter api prisma:generate",
+    "db:migrate": "pnpm --filter api prisma:migrate",
+    "db:deploy": "pnpm --filter api prisma:deploy",
+    "db:seed": "pnpm --filter api prisma:seed",
+    "db:studio": "pnpm --filter api prisma:studio",
+    "codegen": "pnpm --filter web codegen",
+    "web": "pnpm --filter web",
+    "api": "pnpm --filter api",
+    "shared": "pnpm --filter @hermex/shared"
+  },
+  "devDependencies": {
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.10.1"
+  }
+}

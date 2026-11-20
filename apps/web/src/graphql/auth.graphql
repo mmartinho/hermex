@@ -1,0 +1,30 @@
+# Autor(es): Marcus Antonio Martinho Silva <marcus.antonio.martinho.silva@gmail.com>, Claude Code
+# Data Criação: 2026-11-19
+# Data Atualização: 2026-11-19
+# Descrição: Operações GraphQL de autenticação usadas pelo Auth.js (no servidor Next).
+
+mutation Login($input: LoginInput!) {
+  login(input: $input) {
+    accessToken
+    user {
+      id
+      email
+      name
+      image
+      role
+    }
+  }
+}
+
+mutation AuthenticateWithProvider($input: ProviderAuthInput!) {
+  authenticateWithProvider(input: $input) {
+    accessToken
+    user {
+      id
+      email
+      name
+      image
+      role
+    }
+  }
+}

@@ -1,0 +1,16 @@
+# Autor(es): Marcus Antonio Martinho Silva <marcus.antonio.martinho.silva@gmail.com>, Claude Code
+# Data Criação: 2026-11-19
+# Data Atualização: 2026-11-19
+# Descrição: Operações GraphQL de usuários.
+
+query Me {
+  me {
+    id
+    email
+    name
+    image
+    role
+    emailVerified
+    createdAt
+  }
+}

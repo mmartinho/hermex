@@ -1,0 +1,88 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""Resultado de uma autenticação bem-sucedida"""
+type AuthPayload {
+  """JWT a ser enviado em `Authorization: Bearer <token>`"""
+  accessToken: String!
+  user: User!
+}
+
+"""Provedor de login social"""
+enum AuthProvider {
+  FACEBOOK
+  GOOGLE
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""Credenciais de login com email e senha"""
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  """Login social (uso interno do servidor web; exige x-internal-api-key)"""
+  authenticateWithProvider(input: ProviderAuthInput!): AuthPayload!
+
+  """Login com email e senha"""
+  login(input: LoginInput!): AuthPayload!
+
+  """Cadastro com email e senha"""
+  register(input: RegisterInput!): AuthPayload!
+}
+
+"""
+Identidade obtida de um provedor social (uso interno: servidor Next -> API)
+"""
+input ProviderAuthInput {
+  email: String!
+
+  """Se o provedor garante que o email foi verificado"""
+  emailVerified: Boolean!
+  image: String
+  name: String!
+  provider: AuthProvider!
+
+  """Id do usuário no provedor"""
+  providerAccountId: String!
+}
+
+type Query {
+  """Usuário autenticado"""
+  me: User!
+}
+
+"""Dados para cadastro com email e senha"""
+input RegisterInput {
+  email: String!
+  name: String!
+  password: String!
+}
+
+"""Usuário do Hermex"""
+type User {
+  createdAt: DateTime!
+  email: String!
+
+  """Quando o email foi verificado"""
+  emailVerified: DateTime
+  id: ID!
+
+  """URL da foto de perfil"""
+  image: String
+  name: String!
+  role: UserRole!
+  updatedAt: DateTime!
+}
+
+"""Papel (perfil de acesso) do usuário"""
+enum UserRole {
+  ADMIN
+  CUSTOMER
+}

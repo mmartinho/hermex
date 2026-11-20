@@ -1,0 +1,62 @@
+// Autor(es): Marcus Antonio Martinho Silva <marcus.antonio.martinho.silva@gmail.com>, Claude Code
+// Data Criação: 2026-11-19
+// Data Atualização: 2026-11-19
+// Descrição: Schema do banco de dados do Hermex (Postgres). Nesta etapa contém apenas
+//   os modelos de autenticação: User (usuários) e Account (contas de login social vinculadas).
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+  runtime      = "nodejs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// Papéis de acesso. Manter em sincronia com `UserRole` de @hermex/shared.
+enum UserRole {
+  ADMIN
+  CUSTOMER
+}
+
+/// Provedores de login social. Manter em sincronia com `AuthProvider` de @hermex/shared.
+enum AuthProvider {
+  GOOGLE
+  FACEBOOK
+}
+
+/// Usuário do sistema (cliente da locadora ou administrador).
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  /// Data em que o email foi confirmado (ex.: por um provedor social confiável).
+  emailVerified DateTime?
+  name          String
+  /// URL da foto de perfil (normalmente vinda do provedor social).
+  image         String?
+  /// Hash bcrypt da senha. Nulo para quem só entra via login social.
+  passwordHash  String?
+  role          UserRole  @default(CUSTOMER)
+  accounts      Account[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("users")
+}
+
+/// Conta de um provedor social vinculada a um usuário.
+model Account {
+  id                String       @id @default(uuid())
+  userId            String
+  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider          AuthProvider
+  /// Id do usuário dentro do provedor (ex.: `sub` do Google).
+  providerAccountId String
+  createdAt         DateTime     @default(now())
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("accounts")
+}

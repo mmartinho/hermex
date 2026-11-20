@@ -1,0 +1,40 @@
+# Dependências
+node_modules/
+.pnpm-store/
+
+# Builds
+dist/
+build/
+out/
+.next/
+*.tsbuildinfo
+next-env.d.ts
+
+# Código gerado
+apps/api/src/generated/
+
+# Testes
+coverage/
+
+# Variáveis de ambiente (exceto exemplos)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# IDE / SO
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# Vercel
+.vercel
+
+# Dumps do Git Bash (Windows)
+*.stackdump

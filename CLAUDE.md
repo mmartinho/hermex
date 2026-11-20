@@ -1,0 +1,47 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Visão geral
+
+Hermex é uma locadora de veículos. Monorepo PNPM (`pnpm-workspace.yaml`) com três pacotes:
+
+- `apps/web` — Next.js 16 (App Router, Tailwind 4, Atomic Design, Auth.js v5, Apollo Client)
+- `apps/api` — Nest.js 11 (GraphQL code-first/Apollo, Prisma 7 + `@prisma/adapter-pg`, JWT/Passport), Postgres 17 via `docker-compose.yaml`
+- `packages/shared` — `@hermex/shared`, tipos/constantes comuns; consumido a partir de `dist/`, então **precisa ser compilado** (`pnpm build:shared`) após alterações. `pnpm dev` e `postinstall` já fazem isso.
+
+Requer Node ≥ 22.12 e pnpm 12. Os planos de implementação ficam em `plans/` e o PRD em `PRD.md`. Documentação em português; código e cabeçalhos de arquivo seguem o formato de comentários do CLAUDE.md global do usuário.
+
+## Comandos (rodar na raiz)
+
+Os scripts da raiz usam `--filter`, então não é preciso entrar nas pastas.
+
+- Setup: `pnpm install`, copiar `.env.example` → `.env`, `apps/api/.env.example` → `apps/api/.env`, `apps/web/.env.example` → `apps/web/.env.local`; depois `pnpm db:up`, `pnpm db:migrate`, `pnpm db:seed`
+- Dev: `pnpm dev` (web :3000 + API :4000/graphql); `pnpm dev:web` / `pnpm dev:api` isolados
+- Build: `pnpm build` (shared → api → web)
+- Qualidade: `pnpm lint`, `pnpm typecheck`, `pnpm format` / `pnpm format:check`
+- Testes (só a API tem Jest): `pnpm test:api`; um arquivo/teste: `pnpm api test auth.service` ou `pnpm api test -t "nome do teste"`
+- Prisma: `pnpm db:migrate -- --name <nome>`, `db:generate`, `db:studio`, `db:deploy`. O client gerado fica em `apps/api/src/generated/prisma` (não editar à mão)
+- Comando arbitrário num pacote: `pnpm web <cmd>`, `pnpm api <cmd>`, `pnpm shared <cmd>`
+
+## Arquitetura
+
+### Fluxo do schema GraphQL
+O schema é **code-first**: a API gera `apps/api/src/schema.gql` ao subir. O front deriva tipos dele com `pnpm codegen` (GraphQL Codegen client-preset), lendo as operações de `apps/web/src/graphql/**/*.graphql` e gerando `apps/web/src/gql/`. Ao mudar resolvers/models: subir a API → `pnpm codegen`.
+
+### Autenticação (atravessa web e api)
+- A **API é a fonte da verdade**. No login social (Google/Facebook) ou email/senha, o servidor Next (`apps/web/src/auth.ts`) chama a mutation `authenticateWithProvider`, protegida pelo header `x-internal-api-key` (`InternalApiKeyGuard`), que cria/vincula o usuário e devolve o JWT da API.
+- `INTERNAL_API_KEY` deve ter o **mesmo valor** em `apps/api/.env` e `apps/web/.env.local`.
+- O JWT da API vive no token de sessão do Auth.js (cookie httpOnly) e nunca vai ao navegador. Client Components falam com a API via proxy `apps/web/src/app/api/graphql/route.ts`, que anexa o token no servidor.
+- Conta social só é vinculada a usuário existente se o provedor garantir email verificado (Google); senão retorna erro de conflito.
+- Na API: `auth/` (guards `GqlAuthGuard`, `RolesGuard`, `InternalApiKeyGuard`, strategy JWT, decorators `@CurrentUser`/`@Roles`), `common/graphql/format-error.ts` mapeia status HTTP para `extensions.code` (ex.: 409 → `CONFLICT`), `config/env.validation.ts` valida o ambiente.
+
+### Front-end
+- Componentes em Atomic Design: `src/components/{atoms,molecules,organisms,templates}` com `index.ts` de barrel em cada nível.
+- Rotas em grupos `(public)` e `(private)`; o grupo privado é protegido por layout + `src/proxy.ts`.
+- Next 16: `proxy.ts` substitui `middleware.ts`, e **Cache Components está ativo** — leituras de sessão/dados dinâmicos devem ficar sob `<Suspense>`.
+
+## Restrições de versão (não "atualizar" sem checar)
+- Nest CLI 12 e GraphQL Codegen CLI > 7 quebram no Node 22.13 (`ERR_REQUIRE_CYCLE_MODULE`); por isso Nest 11 e Codegen CLI 7 + client-preset 5.
+- Prisma fixado em 7.10.1 (o `latest` do npm era um RC do Prisma 8); usa `prisma.config.ts` e adapter `pg`.
+- `bcryptjs` em vez de `bcrypt` (evita build nativo no Windows). Scripts de build de dependências são controlados por `allowBuilds` em `pnpm-workspace.yaml`.

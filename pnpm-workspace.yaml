@@ -1,0 +1,19 @@
+# Autor(es): Marcus Antonio Martinho Silva <marcus.antonio.martinho.silva@gmail.com>, Claude Code
+# Data Criação: 2026-11-19
+# Data Atualização: 2026-11-19
+# Descrição: Definição do workspace PNPM do monorepo Hermex. Lista os pacotes
+#   (apps e packages) e quais dependências podem executar scripts de build.
+
+packages:
+  - apps/*
+  - packages/*
+
+allowBuilds:
+  '@prisma/engines': true
+  prisma: true
+  '@nestjs/core': true
+  esbuild: true
+  '@parcel/watcher': true
+  '@apollo/protobufjs': false
+  sharp: false
+  unrs-resolver: false
