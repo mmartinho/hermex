@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "github-hermex": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": {
+        "Authorization": "Bearer ${GITHUB_PAT}",
+        "X-MCP-Toolsets": "code_security,context,repos,issues,pull_requests,discussions",
+        "X-MCP-Readonly": "true"
+      }
+    }
+  }
+}
