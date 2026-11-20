@@ -12,6 +12,11 @@ Hermex é uma locadora de veículos. Monorepo PNPM (`pnpm-workspace.yaml`) com t
 
 Requer pnpm 12. O Node 24 é fixado por projeto via `devEngines.runtime` no `package.json` raiz: o pnpm o baixa no `pnpm install` e o usa em todos os scripts `pnpm ...`, sem tocar no Node global (`node` digitado direto no terminal continua sendo o global). Os planos de implementação ficam em `plans/` e o PRD em `PRD.md`. Documentação em português; código e cabeçalhos de arquivo seguem o formato de comentários do CLAUDE.md global do usuário.
 
+## Git
+- Repositório único do monorepo (remoto `origin`: github.com/mmartinho/hermex). `apps/web` e `apps/api` **não** podem ter `.git` próprio — scaffolders como `create-next-app` e `nest new` criam um; remova-o.
+- Branches por aula do curso (`aula-1`, `aula-2`, ...), não por feature.
+- Mensagens em **Conventional Commits, em português do Brasil**: `tipo(escopo opcional): descrição` com tipo em inglês (`feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `style`, `perf`, `build`, `ci`) e descrição/corpo em pt-BR, no imperativo da 3ª pessoa e minúscula (ex.: `feat(api): adiciona resolver de reservas`). Escopos usuais: `web`, `api`, `shared`. Mudança incompatível: `!` após o tipo e rodapé `BREAKING CHANGE:`.
+
 ## Comandos (rodar na raiz)
 
 Os scripts da raiz usam `--filter`, então não é preciso entrar nas pastas.
