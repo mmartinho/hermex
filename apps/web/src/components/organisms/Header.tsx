@@ -1,7 +1,7 @@
 /**
  * Autor(es): Marcus Antonio Martinho Silva <marcus.antonio.martinho.silva@gmail.com>, Claude Code
  * Data Criação: 2026-11-19
- * Data Atualização: 2026-11-19
+ * Data Atualização: 2026-11-20
  * Descrição: Organismo Header. Cabeçalho da aplicação com a marca Hermex e uma área à direita
  *   (ações) fornecida pelo template.
  */
@@ -25,8 +25,8 @@ export function Header({ actions, homeHref = '/' }: HeaderProps) {
   return (
     <header className="border-b border-slate-200 bg-white/80 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        <Link href={homeHref} className="flex items-center gap-2 text-lg font-bold text-brand-700">
-          <span aria-hidden="true" className="rounded-md bg-brand-600 px-2 py-0.5 text-white">
+        <Link href={homeHref} className="flex items-center gap-2 text-lg font-bold text-secondary">
+          <span aria-hidden="true" className="rounded-md bg-primary px-2 py-0.5 text-white">
             H
           </span>
           Hermex

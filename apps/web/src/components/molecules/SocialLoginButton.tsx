@@ -1,7 +1,7 @@
 /**
  * Autor(es): Marcus Antonio Martinho Silva <marcus.antonio.martinho.silva@gmail.com>, Claude Code
  * Data Criação: 2026-11-19
- * Data Atualização: 2026-11-19
+ * Data Atualização: 2026-11-20
  * Descrição: Molécula SocialLoginButton. Formulário de um botão que inicia o login com um
  *   provedor social (Google ou Facebook) via Server Action.
  */
@@ -50,7 +50,7 @@ export function SocialLoginButton({ provider, callbackUrl }: SocialLoginButtonPr
   const { label, icon } = PROVIDERS[provider];
   return (
     <form action={loginWithProvider.bind(null, provider, callbackUrl)}>
-      <Button type="submit" variant="secondary" fullWidth>
+      <Button type="submit" variant="ghost" fullWidth className="border border-neutral-details">
         {icon}
         {label}
       </Button>

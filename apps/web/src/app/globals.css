@@ -1,42 +1,102 @@
 /*
  * Autor(es): Marcus Antonio Martinho Silva <marcus.antonio.martinho.silva@gmail.com>, Claude Code
  * Data Criação: 2026-11-19
- * Data Atualização: 2026-11-19
- * Descrição: Estilos globais. Importa o Tailwind v4 e define os tokens do tema Hermex
- *   (cores da marca, fundo/texto em modo claro e escuro, fontes).
+ * Data Atualização: 2026-11-20
+ * Descrição: Estilos globais. Importa o Tailwind v4 e define os tokens do design system Hermex
+ *   extraídos do Figma (cores, tipografia, sombras de elevação e cor de foco) e a classe base
+ *   dos ícones Material Icons. O Figma só define o modo claro: a variante `dark:` fica presa à
+ *   classe `.dark` (nunca aplicada), para o tema não escurecer pelo sistema operacional.
  */
 @import 'tailwindcss';
 
-:root {
-  --background: #ffffff;
-  --foreground: #0f172a;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* Modo claro apenas: `dark:` só vale com a classe `.dark` (não usada). */
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-brand-50: #eff6ff;
-  --color-brand-100: #dbeafe;
-  --color-brand-500: #3b82f6;
-  --color-brand-600: #2563eb;
-  --color-brand-700: #1d4ed8;
-  --color-brand-800: #1e40af;
+  /* Fontes (variáveis definidas pelo next/font em src/app/fonts.ts). */
+  --font-sans: var(--font-inter), 'Inter', system-ui, sans-serif;
+  --font-heading: var(--font-exo2), 'Exo 2', var(--font-inter), system-ui, sans-serif;
+
+  /* Cores neutras. */
+  --color-neutral-background: #fbfbfb;
+  --color-neutral-text: #444444;
+  --color-neutral-divisor: #f2f2f2;
+  --color-neutral-details: #e7e7e7;
+  --color-neutral-white: #ffffff;
+  --color-neutral-black: #000000;
+
+  /* Cores da marca. */
+  --color-primary-dark: #e28634;
+  --color-primary: #f29849;
+  --color-primary-light: #ffdab8;
+  --color-secondary-dark: #23384d;
+  --color-secondary: #1d2f40;
+  --color-secondary-light: #2e4b66;
+
+  /* Foco e feedbacks. */
+  --color-focus: #ff00d0;
+  --color-attention: #ffd400;
+  --color-negative: #ff3f48;
+  --color-positive: #6edc3b;
+
+  /* Tipografia — headings (Exo 2 Bold, altura de linha 125%). */
+  --text-heading-xxl: 4.75rem;
+  --text-heading-xxl--line-height: 1.25;
+  --text-heading-xl: 3.8125rem;
+  --text-heading-xl--line-height: 1.25;
+  --text-heading-lg: 3.0625rem;
+  --text-heading-lg--line-height: 1.25;
+  --text-heading-md: 2.4375rem;
+  --text-heading-md--line-height: 1.25;
+  --text-heading-sm: 1.9375rem;
+  --text-heading-sm--line-height: 1.25;
+  --text-heading-xs: 1.5625rem;
+  --text-heading-xs--line-height: 1.25;
+
+  /* Tipografia — body (Inter Regular, altura de linha 120%). */
+  --text-body-xxl: 1.9375rem;
+  --text-body-xxl--line-height: 1.2;
+  --text-body-xl: 1.5625rem;
+  --text-body-xl--line-height: 1.2;
+  --text-body-lg: 1.25rem;
+  --text-body-lg--line-height: 1.2;
+  --text-body-md: 1rem;
+  --text-body-md--line-height: 1.2;
+  --text-body-sm: 0.8125rem;
+  --text-body-sm--line-height: 1.2;
+  --text-body-xs: 0.625rem;
+  --text-body-xs--line-height: 1.2;
+
+  /* Sombras (token "elevation": #848484 com opacidade e blur crescentes). */
+  --shadow-elevation-1: 0 0 10px rgb(132 132 132 / 0.1);
+  --shadow-elevation-2: 0 0 20px rgb(132 132 132 / 0.2);
+  --shadow-elevation-3: 0 0 30px rgb(132 132 132 / 0.25);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #020617;
-    --foreground: #e2e8f0;
-  }
+/*
+ * Ícones Material Icons por ligadura (fonte carregada por @fontsource/material-icons).
+ * O tamanho segue o font-size herdado (16px por padrão, como no Figma).
+ */
+@utility material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 1em;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'liga';
+  user-select: none;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  background: var(--color-neutral-white);
+  color: var(--color-neutral-text);
+  font-family: var(--font-sans);
 }

@@ -1,42 +1,58 @@
 /**
  * Autor(es): Marcus Antonio Martinho Silva <marcus.antonio.martinho.silva@gmail.com>, Claude Code
  * Data Criação: 2026-11-19
- * Data Atualização: 2026-11-19
- * Descrição: Molécula NavLink. Link de navegação do cabeçalho baseado no `next/link`.
+ * Data Atualização: 2026-11-20
+ * Descrição: Molécula NavLink. Link de navegação baseado no `next/link`, com o visual do
+ *   componente "Links" do Figma (hover/pressed sublinhados, foco com borda magenta) e ícone
+ *   opcional à esquerda (ex.: "Cadastro" e "Login" do header).
  */
 import Link, { type LinkProps } from 'next/link';
 import type { ReactNode } from 'react';
+import { Icon, type MaterialIconName } from '@/components/atoms';
+import { cn } from '@/lib/cn';
 
 export interface NavLinkProps extends LinkProps {
   children: ReactNode;
-  /** Estilo de destaque (botão). */
+  /** Ícone Material Icons à esquerda do texto. */
+  icon?: MaterialIconName;
+  /** Destaque em formato de botão primário (chamada para ação). */
   highlight?: boolean;
   className?: string;
 }
 
+/** Visual do componente "Links" do Figma. */
+const LINK_CLASSES =
+  'text-neutral-text underline-offset-2 hover:text-primary-light hover:underline active:text-primary-dark active:underline';
+
+/** Destaque: mesmas cores do "Botão primário". */
+const HIGHLIGHT_CLASSES =
+  'rounded bg-primary px-4 py-3 text-neutral-white hover:bg-primary-light hover:text-neutral-text active:bg-primary-dark active:text-neutral-white';
+
 /**
  * Link de navegação.
  *
- * @param props - Destino (`href`), conteúdo e estilo.
+ * @param props - Destino (`href`), conteúdo, ícone, destaque e classes extras.
  * @returns Elemento `<a>` gerenciado pelo Next.
  */
 export function NavLink({
   children,
+  icon,
   highlight = false,
-  className = '',
+  className,
   ...linkProps
 }: NavLinkProps) {
   return (
     <Link
       {...linkProps}
-      className={[
-        'rounded-lg px-3 py-2 text-sm font-medium transition',
-        highlight
-          ? 'bg-brand-600 text-white hover:bg-brand-700'
-          : 'text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800',
+      className={cn(
+        'inline-flex items-center gap-2 font-sans text-body-md transition-colors',
+        // Foco do Figma: borda de 1px na cor de foco, com 8px de respiro, sem deslocar o layout.
+        'outline-none focus-visible:outline-1 focus-visible:outline-solid focus-visible:outline-offset-8 focus-visible:outline-focus',
+        highlight ? HIGHLIGHT_CLASSES : LINK_CLASSES,
         className,
-      ].join(' ')}
+      )}
     >
+      {icon && <Icon name={icon} />}
       {children}
     </Link>
   );

@@ -1,7 +1,7 @@
 /**
  * Autor(es): Marcus Antonio Martinho Silva <marcus.antonio.martinho.silva@gmail.com>, Claude Code
  * Data Criação: 2026-11-19
- * Data Atualização: 2026-11-19
+ * Data Atualização: 2026-11-20
  * Descrição: Átomo Avatar. Mostra a foto do usuário (ex.: vinda do Google/Facebook) ou suas
  *   iniciais quando não há foto.
  */
@@ -55,7 +55,7 @@ export function Avatar({ name, src, size = 36 }: AvatarProps) {
     <span
       aria-label={name ?? 'Usuário'}
       style={{ width: size, height: size }}
-      className="inline-flex items-center justify-center rounded-full bg-brand-100 text-sm font-semibold text-brand-700"
+      className="inline-flex items-center justify-center rounded-full bg-primary-light text-body-sm font-bold text-secondary"
     >
       {getInitials(name)}
     </span>
