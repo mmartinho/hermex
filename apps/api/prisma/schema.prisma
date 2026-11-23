@@ -1,8 +1,8 @@
 // Autor(es): Marcus Antonio Martinho Silva <marcus.antonio.martinho.silva@gmail.com>, Claude Code
 // Data Criação: 2026-11-19
-// Data Atualização: 2026-11-19
-// Descrição: Schema do banco de dados do Hermex (Postgres). Nesta etapa contém apenas
-//   os modelos de autenticação: User (usuários) e Account (contas de login social vinculadas).
+// Data Atualização: 2026-11-23
+// Descrição: Schema do banco de dados do Hermex (Postgres). Contém os modelos de autenticação,
+//   User (usuários) e Account (contas de login social vinculadas), e a frota (Vehicle).
 
 generator client {
   provider     = "prisma-client"
@@ -59,4 +59,23 @@ model Account {
   @@unique([provider, providerAccountId])
   @@index([userId])
   @@map("accounts")
+}
+
+/// Veículo da frota da locadora.
+model Vehicle {
+  id           String   @id @default(uuid())
+  /// Marca (ex.: Hyundai).
+  brand        String
+  /// Modelo (ex.: HB20).
+  model        String
+  /// Ano do modelo.
+  year         Int
+  /// Placa do veículo, única na frota.
+  licensePlate String   @unique
+  /// Valor da diária em reais. Decimal para não perder centavos com ponto flutuante.
+  dailyRate    Decimal  @db.Decimal(10, 2)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("vehicles")
 }
