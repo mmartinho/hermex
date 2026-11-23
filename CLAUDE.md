@@ -25,8 +25,9 @@ Os scripts da raiz usam `--filter`, então não é preciso entrar nas pastas.
 - Dev: `pnpm dev` (web :3000 + API :4000/graphql); `pnpm dev:web` / `pnpm dev:api` isolados
 - Build: `pnpm build` (shared → api → web)
 - Qualidade: `pnpm lint`, `pnpm typecheck`, `pnpm format` / `pnpm format:check`
+- Storybook (só web): `pnpm storybook` (:6006), `pnpm build:storybook` (saída em `apps/web/storybook-static`, ignorada)
 - Testes (só a API tem Jest): `pnpm test:api`; um arquivo/teste: `pnpm api test auth.service` ou `pnpm api test -t "nome do teste"`
-- Prisma: `pnpm db:migrate -- --name <nome>`, `db:generate`, `db:studio`, `db:deploy`. O client gerado fica em `apps/api/src/generated/prisma` (não editar à mão)
+- Prisma: `pnpm db:migrate --name <nome>` (sem `--`: com ele o Prisma ignora o nome e trava no prompt interativo), `db:generate`, `db:studio`, `db:deploy`. O client gerado fica em `apps/api/src/generated/prisma` (não editar à mão)
 - Comando arbitrário num pacote: `pnpm web <cmd>`, `pnpm api <cmd>`, `pnpm shared <cmd>`
 
 ## Arquitetura
@@ -42,7 +43,9 @@ O schema é **code-first**: a API gera `apps/api/src/schema.gql` ao subir. O fro
 - Na API: `auth/` (guards `GqlAuthGuard`, `RolesGuard`, `InternalApiKeyGuard`, strategy JWT, decorators `@CurrentUser`/`@Roles`), `common/graphql/format-error.ts` mapeia status HTTP para `extensions.code` (ex.: 409 → `CONFLICT`), `config/env.validation.ts` valida o ambiente.
 
 ### Front-end
-- Componentes em Atomic Design: `src/components/{atoms,molecules,organisms,templates}` com `index.ts` de barrel em cada nível.
+- Componentes em Atomic Design: `src/components/{atoms,molecules,organisms,templates}` com `index.ts` de barrel em cada nível. Cada componente tem uma story ao lado (`Componente.stories.tsx`).
+- Design system do Figma em `src/app/globals.css` (`@theme`): cores (`primary`, `secondary`, `neutral-*`, `focus`…), tipografia (`text-heading-*`, `text-body-*`, fontes em `src/app/fonts.ts`), sombras `shadow-elevation-*`. Use esses tokens, não cores/tamanhos arbitrários. Ícones: `<Icon name="…" />` (Material Icons). Só modo claro.
+- Tailwind 4: o Next usa `@tailwindcss/turbopack`; o Storybook usa `@tailwindcss/vite` (em `.storybook/main.ts`). Ao usar `outline-none` + `focus-visible:outline-*`, declare também `focus-visible:outline-solid`.
 - Rotas em grupos `(public)` e `(private)`; o grupo privado é protegido por layout + `src/proxy.ts`.
 - Next 16: `proxy.ts` substitui `middleware.ts`, e **Cache Components está ativo** — leituras de sessão/dados dinâmicos devem ficar sob `<Suspense>`.
 

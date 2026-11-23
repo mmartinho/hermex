@@ -8,6 +8,10 @@
         "X-MCP-Toolsets": "code_security,context,repos,issues,pull_requests,discussions",
         "X-MCP-Readonly": "true"
       }
+    },
+    "linear-server": {
+      "type": "http",
+      "url": "https://mcp.linear.app/mcp"
     }
   }
 }
