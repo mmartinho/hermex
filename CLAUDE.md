@@ -15,6 +15,7 @@ Requer pnpm 12. O Node 24 é fixado por projeto via `devEngines.runtime` no `pac
 ## Git
 - Repositório único do monorepo (remoto `origin`: github.com/mmartinho/hermex). `apps/web` e `apps/api` **não** podem ter `.git` próprio — scaffolders como `create-next-app` e `nest new` criam um; remova-o.
 - Branches por aula do curso (`aula-1`, `aula-2`, ...), não por feature.
+- Branches **acumulativas**: cada `aula-N` nasce da `aula-(N-1)` (não da `main`), então a mais recente contém as alterações de todas as anteriores. O PR de cada aula usa a aula anterior como base (ex.: `aula-2` → `aula-1`). O remoto não tem `main`; a branch padrão no GitHub é a `aula-1`.
 - Mensagens em **Conventional Commits, em português do Brasil**: `tipo(escopo opcional): descrição` com tipo em inglês (`feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `style`, `perf`, `build`, `ci`) e descrição/corpo em pt-BR, no imperativo da 3ª pessoa e minúscula (ex.: `feat(api): adiciona resolver de reservas`). Escopos usuais: `web`, `api`, `shared`. Mudança incompatível: `!` após o tipo e rodapé `BREAKING CHANGE:`.
 
 ## Comandos (rodar na raiz)
