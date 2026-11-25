@@ -16,7 +16,7 @@ Fluxo completo para buscar uma issue no Linear e entregá-la pronta, testada e v
 
 ## 1. Obter a spec
 
-- Use `mcp__linear-server__get_issue` com o id/identifier (ex.: `HER-12`) para buscar a issue.
+- Use `mcp__linear-server__get_issue` com o id/identifier (ex.: `HRMX-12`) para buscar a issue.
 - Se o usuário passou só um link, extraia o identifier da URL.
 - Se houver link do Figma nos anexos/descrição, guarde para o passo 3.
 
@@ -34,7 +34,7 @@ Extrair da spec:
 
 ## 3. Se houver design no Figma
 
-- Use `figma:figma-implement-design` como skill auxiliar.
+- Use `figma:figma-design-to-code` como skill auxiliar.
 - Colete tokens, variantes e screenshots necessários antes de codar.
 - Mapeie elementos do design para componentes já existentes em `apps/web/src/components/{atoms,molecules,organisms,templates}` antes de criar novos.
 
@@ -53,7 +53,7 @@ Extrair da spec:
 Antes de começar a codar, **atualize o status** da issue:
 
 ```
-mcp__linear-server__save_issue(id: "HER-XX", state: "In Progress")
+mcp__linear-server__save_issue(id: "HRMX-XX", state: "In Progress")
 ```
 
 Se o time usa outro nome para esse estado (confirmado no passo 0), use-o.
@@ -70,7 +70,7 @@ Se o time usa outro nome para esse estado (confirmado no passo 0), use-o.
 
 **Obrigatório para mudanças de UI:**
 
-- Suba o dev server (`pnpm web:dev`) e abra no navegador.
+- Suba o dev server (`pnpm dev:web`) e abra no navegador.
 - Teste o golden path e os edge cases (loading, erro, vazio, responsivo).
 - Monitore o console por erros/warnings.
 - Se não for possível testar no navegador, diga explicitamente — type-check e lint não substituem verificação visual.
@@ -78,7 +78,7 @@ Se o time usa outro nome para esse estado (confirmado no passo 0), use-o.
 ## 8. Conferir contra a spec
 
 - Escreva um checklist com os critérios de aceite e valide um por um.
-- Rode lint (`pnpm --filter @hermex/web lint`) e build (`pnpm web:build`).
+- Rode lint (`pnpm --filter web lint`) e build (`pnpm build:web`).
 - Se houver testes, execute-os.
 
 ## 9. Marcar como "In Review" no Linear
@@ -86,13 +86,13 @@ Se o time usa outro nome para esse estado (confirmado no passo 0), use-o.
 Quando o código estiver pronto, verificado no navegador e critérios de aceite validados, **mova o status para review**:
 
 ```
-mcp__linear-server__save_issue(id: "HER-XX", state: "In Review")
+mcp__linear-server__save_issue(id: "HRMX-XX", state: "In Review")
 ```
 
 Adicione um comentário resumindo o que foi entregue:
 
 ```
-mcp__linear-server__save_comment(issueId: "HER-XX", body: "...")
+mcp__linear-server__save_comment(issueId: "HRMX-XX", body: "...")
 ```
 
 O comentário deve conter:

@@ -14,7 +14,7 @@ Fluxo de desenvolvimento para buscar uma Issue no Linear e entregá-la pronta, t
 
 ## 1. Obter a spec 
 
-- Use `mcp__linear-server__get_issue` com o id/identifier (ex.: `HER-12`) para buscar a issue. 
+- Use `mcp__linear-server__get_issue` com o id/identifier (ex.: `HRMX-12`) para buscar a issue. 
 - Se o usuário passou apenas um link, extraia o identifier da URL.
 
 ## 2. Ler a spec 
@@ -34,13 +34,13 @@ Extrair a spec:
 - Antes de finalizar o planejamento, releia as specs e garanta: 
 - não criar regressão 
 - não criar pattern / design / estilo desalinhado com o projeto 
-- procure exemplos parecidos (ex.: módulo `vehicles`) para manter coesão 
+- procure exemplos parecidos (ex.: módulo `users`) para manter coesão 
 - Revise o `CLAUDE.md` para convenções específicas do backend (NestJS code-first, Prisma em `src/generated/prisma/`, `nest generate`, etc).
 
 ## 4. Marcar como "In Progress" no Linear 
 
 Antes de começar a codar, **atualize o status** da issue:  
-mcp__linear-server__save_issue(id: "HER-XX", state: "In Progress") 
+mcp__linear-server__save_issue(id: "HRMX-XX", state: "In Progress") 
 Se o time usa outro nome para esse estado (confirmado no passo 0), use-o.
 
 ## 5. Implementar 
@@ -52,22 +52,22 @@ Se o time usa outro nome para esse estado (confirmado no passo 0), use-o.
 
 ## 6. Testar 
  
-- Escreva e execute os testes relacionados (`pnpm --filter @hermex/api test`). 
+- Escreva e execute os testes relacionados (`pnpm --filter api test`). 
 - Se um teste existente quebrar, verifique se foi causado por esse desenvolvimento. Se sim, analise possíveis causas e **PERGUNTE** antes de resolver — talvez uma regra de negócio não prevista precise ser adicionada.
 
 ## 7. Conferir contra a spec 
  
 - Escreva um checklist com os critérios de aceite e valide um por um. 
-- Rode lint (`pnpm --filter @hermex/api lint`) e build (`pnpm api:build`) antes de seguir.
+- Rode lint (`pnpm --filter api lint`) e build (`pnpm build:api`) antes de seguir.
 
 
 ## 8. Marcar como "In Review" no Linear 
 
 Quando o código estiver pronto, testes passando e critérios de aceite validados, **mova o status para review**: 
-mcp__linear-server__save_issue(id: "HER-XX", state: "In Review") 
+mcp__linear-server__save_issue(id: "HRMX-XX", state: "In Review") 
 
 Adicione um comentário resumindo o que foi entregue: 
-mcp__linear-server__save_comment(issueId: "HER-XX", body: "...") 
+mcp__linear-server__save_comment(issueId: "HRMX-XX", body: "...") 
 
 O comentário deve conter: 
 - resumo curto do que foi implementado 
