@@ -1,16 +1,16 @@
 # Plano — US05: criar o domínio Location (HRMX-6)
 
-> **Status: PLANEJADO, NÃO IMPLEMENTADO** — revisado em 2026-11-25 conforme o workflow da skill
-> `/plan-backend-issue-from-linear`. A implementação só começa quando o usuário pedir.
+> **Status: IMPLEMENTADO** em 2026-11-25 (commit `da09993`), conforme o workflow da skill
+> `/plan-backend-issue-from-linear`.
 > Branch: `aula-3`.
-> Issue: [HRMX-6](https://linear.app/mmartinho/issue/HRMX-6) — Backlog, prioridade Medium, milestone Backend.
+> Issue: [HRMX-6](https://linear.app/mmartinho/issue/HRMX-6) — In Review, prioridade Medium, milestone Backend.
 
 ## 0. Pré-requisitos
 
 - MCP do Linear disponível (conferido).
 - Estados do Hermex Team (conferidos): Backlog, Todo, **In Progress**, **In Review**, Done, Canceled, Duplicate.
   Não existe "Blocked": se a issue travar, comentar o motivo e perguntar ao usuário antes de mudar o status.
-- Docker Desktop ligado (daemon parado na data da revisão), depois `pnpm db:up`.
+- Docker Desktop ligado, depois `pnpm db:up`.
 
 ## 1. Spec obtida
 
@@ -64,20 +64,20 @@ durante a implementação é perguntada antes de assumir.
 
 ### ToDo
 
-- [ ] Confirmar Docker ligado e subir o banco (`pnpm db:up`)
-- [ ] Mover a HRMX-6 para **In Progress** (etapa 4)
-- [ ] Scaffold do módulo, resolver e model com `nest generate`
-- [ ] Model Prisma e migration `create_locations`
-- [ ] Model GraphQL
-- [ ] Resolver com a query `locations`
-- [ ] Seed dos 3 locais
-- [ ] Cabeçalhos, JSDoc e Prettier
-- [ ] Regenerar `schema.gql` e rodar `pnpm codegen`
-- [ ] Testes do resolver
-- [ ] Lint, build e typecheck
-- [ ] Checklist contra a spec
-- [ ] Mover para **In Review** e comentar na issue
-- [ ] Commit
+- [x] Confirmar Docker ligado e subir o banco (`pnpm db:up`)
+- [x] Mover a HRMX-6 para **In Progress** (etapa 4)
+- [x] Scaffold do módulo, resolver e model com `nest generate`
+- [x] Model Prisma e migration `create_locations`
+- [x] Model GraphQL
+- [x] Resolver com a query `locations`
+- [x] Seed dos 3 locais
+- [x] Cabeçalhos, JSDoc e Prettier
+- [x] Regenerar `schema.gql` e rodar `pnpm codegen`
+- [x] Testes do resolver
+- [x] Lint, build e typecheck
+- [x] Checklist contra a spec
+- [x] Mover para **In Review** e comentar na issue
+- [x] Commit
 
 ## 4. Marcar como "In Progress"
 
@@ -146,14 +146,14 @@ Antes da primeira alteração de código: `save_issue(id: "HRMX-6", state: "In P
 
 Checklist (marcar item a item):
 
-- [ ] query `locations` retorna lista com `id`, `name`, `address`, `city`, `state`
-- [ ] locais ordenados por nome
-- [ ] seed cria pelo menos 3 locais em cidades diferentes
-- [ ] seed roda várias vezes sem duplicatas
-- [ ] módulo importado e funcionando no `AppModule`
-- [ ] regras: campos do modelo conforme a spec, `name` unique, `state` com 2 caracteres
-- [ ] restrições: sem CRUD, sem relação com `Vehicle`, scaffold via `nest generate`
-- [ ] itens não atendidos listados (se houver)
+- [x] query `locations` retorna lista com `id`, `name`, `address`, `city`, `state`
+- [x] locais ordenados por nome
+- [x] seed cria pelo menos 3 locais em cidades diferentes
+- [x] seed roda várias vezes sem duplicatas
+- [x] módulo importado e funcionando no `AppModule`
+- [x] regras: campos do modelo conforme a spec, `name` unique, `state` com 2 caracteres
+- [x] restrições: sem CRUD, sem relação com `Vehicle`, scaffold via `nest generate`
+- [x] itens não atendidos listados (nenhum)
 
 ## 8. Marcar como "In Review"
 
