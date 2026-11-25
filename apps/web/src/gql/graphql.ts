@@ -31,6 +31,15 @@ export type AuthProvider =
   | 'FACEBOOK'
   | 'GOOGLE';
 
+/** Categoria de veículo */
+export type Category = {
+  __typename?: 'Category';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
 /** Credenciais de login com email e senha */
 export type LoginInput = {
   email: Scalars['String']['input'];
@@ -76,6 +85,8 @@ export type ProviderAuthInput = {
 
 export type Query = {
   __typename?: 'Query';
+  /** Categorias de veículos, ordenadas por nome */
+  categories: Array<Category>;
   /** Usuário autenticado */
   me: User;
 };

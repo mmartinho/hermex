@@ -1,10 +1,10 @@
 /**
  * Autor(es): Marcus Antonio Martinho Silva <marcus.antonio.martinho.silva@gmail.com>, Claude Code
  * Data Criação: 2026-11-19
- * Data Atualização: 2026-11-19
+ * Data Atualização: 2026-11-25
  * Descrição: Módulo raiz da API. Registra a configuração (variáveis de ambiente validadas),
  *   o servidor GraphQL code-first (Apollo), o acesso ao banco (Prisma) e os módulos de
- *   domínio (usuários e autenticação).
+ *   domínio (usuários, autenticação e categorias).
  */
 import { join } from 'node:path';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
@@ -14,6 +14,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import type { Request, Response } from 'express';
 import { AuthModule } from './auth/auth.module';
+import { CategoriesModule } from './categories/categories.module';
 import './common/graphql/enums';
 import { createFormatError } from './common/graphql/format-error';
 import { validateEnv } from './config/env.validation';
@@ -46,6 +47,7 @@ import { UsersModule } from './users/users.module';
     PrismaModule,
     UsersModule,
     AuthModule,
+    CategoriesModule,
   ],
 })
 export class AppModule {}
