@@ -1,9 +1,9 @@
 # Plano — US02: criar o domínio Category (HRMX-5)
 
-> **Status: PLANEJADO, NÃO IMPLEMENTADO** — revisado em 2026-11-25 conforme o workflow da skill
-> `/plan-backend-issue-from-linear`. A implementação só começa quando o usuário pedir.
+> **Status: IMPLEMENTADO** em 2026-11-25 (commit `23d1315`), conforme o workflow da skill
+> `/plan-backend-issue-from-linear`.
 > Branch: `aula-3` (criada a partir da `aula-2`).
-> Issue: [HRMX-5](https://linear.app/mmartinho/issue/HRMX-5) — Backlog, prioridade High, milestone Backend.
+> Issue: [HRMX-5](https://linear.app/mmartinho/issue/HRMX-5) — In Review, prioridade High, milestone Backend.
 
 ## 0. Pré-requisitos
 
@@ -61,20 +61,20 @@ nova durante a implementação é perguntada antes de assumir.
 
 ### ToDo
 
-- [ ] Confirmar Docker ligado e subir o banco (`pnpm db:up`)
-- [ ] Mover a HRMX-5 para **In Progress** (etapa 4)
-- [ ] Scaffold do módulo, resolver e model com `nest generate`
-- [ ] Model Prisma e migration `create_categories`
-- [ ] Model GraphQL
-- [ ] Resolver com a query `categories`
-- [ ] Seed das 5 categorias
-- [ ] Testes do resolver
-- [ ] Cabeçalhos, JSDoc e Prettier
-- [ ] Regenerar `schema.gql` e rodar `pnpm codegen`
-- [ ] Testes, lint, typecheck e build
-- [ ] Checklist contra a spec
-- [ ] Commit
-- [ ] Mover para **In Review** e comentar na issue
+- [x] Confirmar Docker ligado e subir o banco (`pnpm db:up`)
+- [x] Mover a HRMX-5 para **In Progress** (etapa 4)
+- [x] Scaffold do módulo, resolver e model com `nest generate`
+- [x] Model Prisma e migration `create_categories`
+- [x] Model GraphQL
+- [x] Resolver com a query `categories`
+- [x] Seed das 5 categorias
+- [x] Testes do resolver
+- [x] Cabeçalhos, JSDoc e Prettier
+- [x] Regenerar `schema.gql` e rodar `pnpm codegen`
+- [x] Testes, lint, typecheck e build
+- [x] Checklist contra a spec
+- [x] Commit
+- [x] Mover para **In Review** e comentar na issue
 
 ## 4. Marcar como "In Progress"
 
@@ -129,17 +129,18 @@ Antes da primeira alteração de código: `save_issue(id: "HRMX-5", state: "In P
   conferência visual.
 - `pnpm dev:api` e `{ categories { id name } }` em `http://localhost:4000/graphql`. Ordem esperada: Hatch,
   Minivan, Picape, Sedan, SUV (confirmar, pois depende da collation do Postgres).
+  **Obtida:** Hatch, Minivan, Picape, SUV, Sedan (o banco põe maiúsculas antes); o usuário decidiu manter.
 
 Checklist (marcar item a item):
 
-- [ ] query `categories` retorna lista com `id` e `name`
-- [ ] categorias ordenadas por nome
-- [ ] seed cria as 5 categorias
-- [ ] seed roda várias vezes sem erro nem duplicata
-- [ ] módulo importado e funcionando no `AppModule`
-- [ ] regras: campos do modelo conforme a spec, `name` unique, seed idempotente
-- [ ] restrições: sem CRUD, sem campos extras, scaffold via `nest generate`
-- [ ] itens não atendidos listados (se houver)
+- [x] query `categories` retorna lista com `id` e `name`
+- [x] categorias ordenadas por nome
+- [x] seed cria as 5 categorias
+- [x] seed roda várias vezes sem erro nem duplicata
+- [x] módulo importado e funcionando no `AppModule`
+- [x] regras: campos do modelo conforme a spec, `name` unique, seed idempotente
+- [x] restrições: sem CRUD, sem campos extras, scaffold via `nest generate`
+- [x] itens não atendidos listados (nenhum)
 
 ## 8. Marcar como "In Review"
 
