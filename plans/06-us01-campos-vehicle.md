@@ -1,7 +1,7 @@
 # Plano — US01: campos category, imageUrl e transmission no Vehicle (HRMX-12)
 
 > **Status: IMPLEMENTADO** em 2026-11-25 (commit `e027487`), conforme o workflow da skill `/plan-backend-issue-from-linear`.
-> Branch: `aula-3`.
+> Branch: `aula-4` (criada a partir da `aula-3`).
 > Issue: [HRMX-12](https://linear.app/mmartinho/issue/HRMX-12) — In Review, prioridade High, milestone Backend.
 
 ## 0. Pré-requisitos
@@ -135,5 +135,5 @@ instruções de verificação.
 
 ## 9. Commit e próximos passos
 
-- Commit na `aula-3`: `feat(api): adiciona categoria, imagem e transmissão ao Vehicle com query vehicles`.
-- Push e PR (`aula-3` → `aula-2`) só se o usuário pedir.
+- Commit na `aula-4`: `feat(api): adiciona categoria, imagem e transmissão ao Vehicle com query vehicles`.
+- Push e PR (`aula-4` → `aula-3`) só se o usuário pedir.
