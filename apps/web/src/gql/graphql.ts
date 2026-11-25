@@ -104,6 +104,8 @@ export type Query = {
   locations: Array<Location>;
   /** Usuário autenticado */
   me: User;
+  /** Veículos da frota, ordenados por marca e modelo */
+  vehicles: Array<Vehicle>;
 };
 
 /** Dados para cadastro com email e senha */
@@ -112,6 +114,11 @@ export type RegisterInput = {
   name: Scalars['String']['input'];
   password: Scalars['String']['input'];
 };
+
+/** Tipo de transmissão (câmbio) do veículo */
+export type Transmission =
+  | 'AUTOMATIC'
+  | 'MANUAL';
 
 /** Usuário do Hermex */
 export type User = {
@@ -132,6 +139,30 @@ export type User = {
 export type UserRole =
   | 'ADMIN'
   | 'CUSTOMER';
+
+/** Veículo da frota */
+export type Vehicle = {
+  __typename?: 'Vehicle';
+  /** Indica se o veículo pode ser ofertado para locação */
+  available: Scalars['Boolean']['output'];
+  /** Marca (ex.: Hyundai) */
+  brand: Scalars['String']['output'];
+  category?: Maybe<Category>;
+  createdAt: Scalars['DateTime']['output'];
+  /** Valor da diária em reais */
+  dailyRate: Scalars['Float']['output'];
+  id: Scalars['ID']['output'];
+  /** URL da imagem do veículo */
+  imageUrl?: Maybe<Scalars['String']['output']>;
+  /** Placa do veículo */
+  licensePlate: Scalars['String']['output'];
+  /** Modelo (ex.: HB20) */
+  model: Scalars['String']['output'];
+  transmission: Transmission;
+  updatedAt: Scalars['DateTime']['output'];
+  /** Ano do modelo */
+  year: Scalars['Int']['output'];
+};
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;

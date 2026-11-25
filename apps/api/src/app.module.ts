@@ -4,7 +4,7 @@
  * Data Atualização: 2026-11-25
  * Descrição: Módulo raiz da API. Registra a configuração (variáveis de ambiente validadas),
  *   o servidor GraphQL code-first (Apollo), o acesso ao banco (Prisma) e os módulos de
- *   domínio (usuários, autenticação, categorias e locais).
+ *   domínio (usuários, autenticação, categorias, locais e veículos).
  */
 import { join } from 'node:path';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
@@ -21,6 +21,7 @@ import { validateEnv } from './config/env.validation';
 import { LocationsModule } from './locations/locations.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
+import { VehiclesModule } from './vehicles/vehicles.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { UsersModule } from './users/users.module';
     AuthModule,
     CategoriesModule,
     LocationsModule,
+    VehiclesModule,
   ],
 })
 export class AppModule {}
