@@ -40,6 +40,19 @@ export type Category = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+/** Local de retirada e devolução de veículos */
+export type Location = {
+  __typename?: 'Location';
+  address: Scalars['String']['output'];
+  city: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  /** Sigla da UF (ex.: SP) */
+  state: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
 /** Credenciais de login com email e senha */
 export type LoginInput = {
   email: Scalars['String']['input'];
@@ -87,6 +100,8 @@ export type Query = {
   __typename?: 'Query';
   /** Categorias de veículos, ordenadas por nome */
   categories: Array<Category>;
+  /** Locais de retirada e devolução, ordenados por nome */
+  locations: Array<Location>;
   /** Usuário autenticado */
   me: User;
 };

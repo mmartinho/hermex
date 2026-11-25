@@ -28,6 +28,19 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+"""Local de retirada e devolução de veículos"""
+type Location {
+  address: String!
+  city: String!
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+
+  """Sigla da UF (ex.: SP)"""
+  state: String!
+  updatedAt: DateTime!
+}
+
 """Credenciais de login com email e senha"""
 input LoginInput {
   email: String!
@@ -64,6 +77,9 @@ input ProviderAuthInput {
 type Query {
   """Categorias de veículos, ordenadas por nome"""
   categories: [Category!]!
+
+  """Locais de retirada e devolução, ordenados por nome"""
+  locations: [Location!]!
 
   """Usuário autenticado"""
   me: User!

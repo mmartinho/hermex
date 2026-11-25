@@ -4,7 +4,7 @@
  * Data Atualização: 2026-11-25
  * Descrição: Seed do banco. Cria (ou atualiza) o usuário administrador inicial usando
  *   SEED_ADMIN_EMAIL e SEED_ADMIN_PASSWORD de apps/api/.env, e cadastra as categorias de
- *   veículos. É idempotente. Executado com `pnpm db:seed`.
+ *   veículos e os locais de exemplo. É idempotente. Executado com `pnpm db:seed`.
  */
 import 'dotenv/config';
 import { PrismaPg } from '@prisma/adapter-pg';
@@ -17,6 +17,28 @@ const prisma = new PrismaClient({
 
 /** Categorias de veículos exibidas no filtro da home. */
 const CATEGORY_NAMES = ['Hatch', 'Sedan', 'SUV', 'Minivan', 'Picape'];
+
+/** Locais de exemplo (endereços fictícios) para retirada e devolução. */
+const LOCATIONS = [
+  {
+    name: 'Hermex Belo Horizonte Centro',
+    address: 'Av. Exemplo, 100 - Centro',
+    city: 'Belo Horizonte',
+    state: 'MG',
+  },
+  {
+    name: 'Hermex Rio de Janeiro Centro',
+    address: 'Rua Exemplo, 200 - Centro',
+    city: 'Rio de Janeiro',
+    state: 'RJ',
+  },
+  {
+    name: 'Hermex São Paulo Paulista',
+    address: 'Av. Exemplo, 300 - Bela Vista',
+    city: 'São Paulo',
+    state: 'SP',
+  },
+];
 
 /**
  * Cria/atualiza o administrador.
@@ -58,6 +80,24 @@ async function seedCategories(): Promise<void> {
 }
 
 /**
+ * Cadastra os locais de exemplo que ainda não existem (upsert pelo nome, que é único).
+ *
+ * @returns Promise resolvida ao final do cadastro.
+ * @throws {Error} Se o banco estiver inacessível.
+ */
+async function seedLocations(): Promise<void> {
+  for (const location of LOCATIONS) {
+    await prisma.location.upsert({
+      where: { name: location.name },
+      update: {},
+      create: location,
+    });
+  }
+
+  console.warn(`Seed concluído: ${LOCATIONS.length} locais`);
+}
+
+/**
  * Executa todas as etapas do seed.
  *
  * @returns Promise resolvida ao final do seed.
@@ -66,6 +106,7 @@ async function seedCategories(): Promise<void> {
 async function main(): Promise<void> {
   await seedAdmin();
   await seedCategories();
+  await seedLocations();
 }
 
 main()
