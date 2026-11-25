@@ -3,7 +3,7 @@
 > **Status: IMPLEMENTADO** em 2026-11-25 (commit `23d1315`), conforme o workflow da skill
 > `/plan-backend-issue-from-linear`.
 > Branch: `aula-3` (criada a partir da `aula-2`).
-> Issue: [HRMX-5](https://linear.app/mmartinho/issue/HRMX-5) — In Review, prioridade High, milestone Backend.
+> Issue: [HRMX-5](https://linear.app/mmartinho/issue/HRMX-5) — **Done** (2026-11-25, a pedido do usuário), prioridade High, milestone Backend.
 
 ## 0. Pré-requisitos
 
