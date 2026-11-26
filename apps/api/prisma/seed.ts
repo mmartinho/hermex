@@ -1,9 +1,10 @@
 /**
  * Autor(es): Marcus Antonio Martinho Silva <marcus.antonio.martinho.silva@gmail.com>, Claude Code
  * Data Criação: 2026-11-19
- * Data Atualização: 2026-11-19
+ * Data Atualização: 2026-11-25
  * Descrição: Seed do banco. Cria (ou atualiza) o usuário administrador inicial usando
- *   SEED_ADMIN_EMAIL e SEED_ADMIN_PASSWORD de apps/api/.env. Executado com `pnpm db:seed`.
+ *   SEED_ADMIN_EMAIL e SEED_ADMIN_PASSWORD de apps/api/.env, e cadastra as categorias de
+ *   veículos e os locais de exemplo. É idempotente. Executado com `pnpm db:seed`.
  */
 import 'dotenv/config';
 import { PrismaPg } from '@prisma/adapter-pg';
@@ -14,13 +15,38 @@ const prisma = new PrismaClient({
   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }),
 });
 
+/** Categorias de veículos exibidas no filtro da home. */
+const CATEGORY_NAMES = ['Hatch', 'Sedan', 'SUV', 'Minivan', 'Picape'];
+
+/** Locais de exemplo (endereços fictícios) para retirada e devolução. */
+const LOCATIONS = [
+  {
+    name: 'Hermex Belo Horizonte Centro',
+    address: 'Av. Exemplo, 100 - Centro',
+    city: 'Belo Horizonte',
+    state: 'MG',
+  },
+  {
+    name: 'Hermex Rio de Janeiro Centro',
+    address: 'Rua Exemplo, 200 - Centro',
+    city: 'Rio de Janeiro',
+    state: 'RJ',
+  },
+  {
+    name: 'Hermex São Paulo Paulista',
+    address: 'Av. Exemplo, 300 - Bela Vista',
+    city: 'São Paulo',
+    state: 'SP',
+  },
+];
+
 /**
  * Cria/atualiza o administrador.
  *
- * @returns Promise resolvida ao final do seed.
+ * @returns Promise resolvida ao final do cadastro.
  * @throws {Error} Se o banco estiver inacessível.
  */
-async function main(): Promise<void> {
+async function seedAdmin(): Promise<void> {
   const email = (process.env.SEED_ADMIN_EMAIL ?? 'admin@hermex.local').toLowerCase();
   const password = process.env.SEED_ADMIN_PASSWORD ?? 'Admin@123';
 
@@ -37,6 +63,50 @@ async function main(): Promise<void> {
   });
 
   console.warn(`Seed concluído: admin ${admin.email} (${admin.id})`);
+}
+
+/**
+ * Cadastra as categorias que ainda não existem (upsert pelo nome, que é único).
+ *
+ * @returns Promise resolvida ao final do cadastro.
+ * @throws {Error} Se o banco estiver inacessível.
+ */
+async function seedCategories(): Promise<void> {
+  for (const name of CATEGORY_NAMES) {
+    await prisma.category.upsert({ where: { name }, update: {}, create: { name } });
+  }
+
+  console.warn(`Seed concluído: ${CATEGORY_NAMES.length} categorias`);
+}
+
+/**
+ * Cadastra os locais de exemplo que ainda não existem (upsert pelo nome, que é único).
+ *
+ * @returns Promise resolvida ao final do cadastro.
+ * @throws {Error} Se o banco estiver inacessível.
+ */
+async function seedLocations(): Promise<void> {
+  for (const location of LOCATIONS) {
+    await prisma.location.upsert({
+      where: { name: location.name },
+      update: {},
+      create: location,
+    });
+  }
+
+  console.warn(`Seed concluído: ${LOCATIONS.length} locais`);
+}
+
+/**
+ * Executa todas as etapas do seed.
+ *
+ * @returns Promise resolvida ao final do seed.
+ * @throws {Error} Se o banco estiver inacessível.
+ */
+async function main(): Promise<void> {
+  await seedAdmin();
+  await seedCategories();
+  await seedLocations();
 }
 
 main()
