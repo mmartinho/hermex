@@ -7,6 +7,11 @@ description: Planeja e executa uma issue de backend de ponta a ponta a partir do
 
 Fluxo de desenvolvimento para buscar uma Issue no Linear e entregá-la pronta, testada e verificada contra a spec.
 
+> **O fluxo tem duas fases separadas por uma aprovação do usuário:**
+>
+> 1. **Planejamento (passos 0–3):** só leitura (Linear, código, banco) e escrita do arquivo de plano em `plans/`. **Nenhum arquivo de código, schema, migration ou seed é criado ou alterado**, nenhum comando que modifique o projeto ou o banco é executado (`nest generate`, `db:migrate`, `pnpm add`...) e o status da issue **não muda**.
+> 2. **Execução (passos 4–9):** só começa depois de o usuário **aprovar explicitamente** o plano no chat ("aprovado", "pode implementar"...). Perguntas, comentários ou pedidos de ajuste no plano **não** contam como aprovação: ajuste o plano e peça aprovação de novo.
+
 ## 0. Pré-requisitos 
 
 - MCP do Linear disponível no projeto (`mcp__linear-server__*`) 
@@ -28,24 +33,29 @@ Extrair a spec:
 - Critérios de Aceite
 - Plano de verificação
 
-## 3. Planejar 
+## 3. Planejar (escrever o plano e PARAR)
 
-- Crie uma ToDo list (TodoWrite) com todas as tarefas necessárias. 
-- Antes de finalizar o planejamento, releia as specs e garanta: 
-- não criar regressão 
-- não criar pattern / design / estilo desalinhado com o projeto 
-- procure exemplos parecidos (ex.: módulo `users`) para manter coesão 
+- Escreva o plano em `plans/NN-usXX-<slug>.md` (NN = próximo número em `plans/`), no mesmo formato dos planos anteriores (ex.: `plans/06-us01-campos-vehicle.md`): cabeçalho com **Status: AGUARDANDO APROVAÇÃO**, branch e issue; seções numeradas seguindo os passos desta skill (pré-requisitos, spec obtida, leitura da spec em tabela, planejamento com referências no código, **divergências spec × repositório**, decisões do usuário, decisões técnicas, ToDo, implementação, testes, conferência contra a spec, status e commit).
+- O plano deve listar os arquivos/módulos que serão criados ou alterados, as mudanças de schema Prisma e migrations (e se são seguras para os dados existentes), o impacto no `schema.gql`/codegen do front e os testes previstos.
+- Divergências ou ambiguidades: pergunte ao usuário (AskUserQuestion) **durante o planejamento** e registre as respostas em "Decisões do usuário".
+- Antes de finalizar o planejamento, releia as specs e garanta que o plano:
+  - não cria regressão
+  - não cria pattern / design / estilo desalinhado com o projeto
+  - segue exemplos parecidos (ex.: módulo `users`, `categories`) para manter coesão
 - Revise o `CLAUDE.md` para convenções específicas do backend (NestJS code-first, Prisma em `src/generated/prisma/`, `nest generate`, etc).
+- **Pare aqui.** Apresente ao usuário um resumo do plano (caminho do arquivo, decisões e divergências) e **peça aprovação**. Não edite código, não rode comandos que alterem o projeto ou o banco e não mova o status da issue enquanto não houver aprovação explícita.
+- Aprovado: mude o cabeçalho do plano para **Status: APROVADO** (com a data) e siga para o passo 4. Ao final, marque **IMPLEMENTADO** e os itens da ToDo/checklist, como nos planos anteriores.
 
 ## 4. Marcar como "In Progress" no Linear 
 
-Antes de começar a codar, **atualize o status** da issue:  
+**Só depois da aprovação do plano** e antes de começar a codar, **atualize o status** da issue:  
 mcp__linear-server__save_issue(id: "HRMX-XX", state: "In Progress") 
 Se o time usa outro nome para esse estado (confirmado no passo 0), use-o.
 
 ## 5. Implementar 
 
-- Respeite a stack e o planejamento realizado. 
+- Respeite a stack e o plano aprovado. Se surgir algo que obrigue a desviar do plano (novo módulo, mudança de contrato GraphQL, migration diferente, regressão), **pare e pergunte**, depois registre o desvio no plano.
+- Crie a ToDo list (TodoWrite) a partir da seção ToDo do plano.
 - Use `nest generate` (rodado a partir de `apps/api`) para novos módulos/resolvers/services — nunca crie manualmente. 
 - Nunca edite `package.json` à mão — use `pnpm add`/`pnpm install`. 
 - Atualize a ToDo list conforme avança.
@@ -82,6 +92,7 @@ O comentário deve conter:
 
 ## Regras de ouro 
 
-- **Nunca pule atualizações de status**: in progress no início, in review quando entregar. 
+- **Plano antes, código depois da aprovação**: nenhuma linha de código, migration ou `nest generate` antes de o usuário aprovar o plano em `plans/`.
+- **Nunca pule atualizações de status**: in progress ao começar a codar (após a aprovação), in review quando entregar. 
 - **Um status por vez**: se descobrir que a issue está bloqueada, mova para "Blocked"/"Canceled" com comentário explicando. 
 - Se algo na spec for ambíguo, **pergunte antes** de assumir — não mude o status pra review com dúvidas em aberto.
