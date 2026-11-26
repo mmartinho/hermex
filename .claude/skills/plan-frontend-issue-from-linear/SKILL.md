@@ -7,6 +7,11 @@ description: Planeja e executa uma issue de frontend de ponta a ponta a partir d
 
 Fluxo completo para buscar uma issue no Linear e entregá-la pronta, testada e verificada contra a spec — **mantendo o status da issue atualizado no Linear a cada fase**.
 
+> **O fluxo tem duas fases separadas por uma aprovação do usuário:**
+>
+> 1. **Planejamento (passos 0–4):** só leitura (Linear, Figma, código) e escrita do arquivo de plano em `plans/`. **Nenhum arquivo de código é criado ou alterado** e o status da issue **não muda**.
+> 2. **Execução (passos 5–10):** só começa depois de o usuário **aprovar explicitamente** o plano no chat ("aprovado", "pode implementar"...). Perguntas, comentários ou pedidos de ajuste no plano **não** contam como aprovação: ajuste o plano e peça aprovação de novo.
+
 ## 0. Pré-requisitos 
 
 - Use MCP do Linear disponível no projeto (`mcp__linear-server__*`) para interagir com as issues
@@ -38,19 +43,23 @@ Extrair da spec:
 - Colete tokens, variantes e screenshots necessários antes de codar.
 - Mapeie elementos do design para componentes já existentes em `apps/web/src/components/{atoms,molecules,organisms,templates}` antes de criar novos.
 
-## 4. Planejar
+## 4. Planejar (escrever o plano e PARAR)
 
-- Crie uma ToDo list (TodoWrite) com todas as tarefas necessárias.
-- Antes de finalizar, releia a spec e garanta:
+- Escreva o plano em `plans/NN-usXX-<slug>.md` (NN = próximo número em `plans/`), no mesmo formato dos planos anteriores (ex.: `plans/06-us01-campos-vehicle.md`): cabeçalho com **Status: AGUARDANDO APROVAÇÃO**, branch e issue; seções numeradas seguindo os passos desta skill (spec obtida, leitura da spec em tabela, design do Figma, planejamento com referências no código, **divergências spec × Figma × código**, decisões do usuário, decisões técnicas, ToDo, implementação, validação no navegador, conferência contra a spec, status e commit).
+- O plano deve listar os arquivos que serão criados/alterados e o que muda em cada um.
+- Divergências entre spec, Figma e código: pergunte ao usuário (AskUserQuestion) **durante o planejamento** e registre as respostas em "Decisões do usuário".
+- Antes de finalizar, releia a spec e garanta que o plano:
   - respeitar **Atomic Design** (`atoms` → `molecules` → `organisms` → `templates`) com barrel `index.ts` em cada pasta
   - reaproveitar componentes existentes antes de criar novos
   - seguir convenções do Next.js 16 (App Router) — **consultar `node_modules/next/dist/docs/` antes de usar APIs do Next**, conforme `apps/web/AGENTS.md`
   - não introduzir regressão em telas vizinhas
 - Revise o `CLAUDE.md` do projeto para convenções.
+- **Pare aqui.** Apresente ao usuário um resumo do plano (caminho do arquivo, decisões e divergências) e **peça aprovação**. Não edite código, não mova o status da issue nem suba servidores enquanto não houver aprovação explícita.
+- Aprovado: mude o cabeçalho do plano para **Status: APROVADO** (com a data) e siga para o passo 5. Ao final, marque **IMPLEMENTADO** e os itens da ToDo/checklist, como nos planos anteriores.
 
 ## 5. Marcar como "In Progress" no Linear
 
-Antes de começar a codar, **atualize o status** da issue:
+**Só depois da aprovação do plano** e antes de começar a codar, **atualize o status** da issue:
 
 ```
 mcp__linear-server__save_issue(id: "HRMX-XX", state: "In Progress")
@@ -60,7 +69,8 @@ Se o time usa outro nome para esse estado (confirmado no passo 0), use-o.
 
 ## 6. Implementar
 
-- Respeite a stack e o planejamento realizado.
+- Respeite a stack e o plano aprovado. Se surgir algo que obrigue a desviar do plano (novo arquivo, mudança de API de componente, regressão), **pare e pergunte**, depois registre o desvio no plano.
+- Crie a ToDo list (TodoWrite) a partir da seção ToDo do plano.
 - Novo componente? Crie no nível atômico correto e exporte via barrel `index.ts`.
 - Use Tailwind e os tokens do design system — evite valores hardcoded quando houver token equivalente.
 - Nunca edite `package.json` à mão — use `pnpm add`/`pnpm install`.
@@ -109,7 +119,8 @@ O comentário deve conter:
 
 ## Regras de ouro
 
-- **Nunca pule atualizações de status**: in progress no início, in review quando entregar.
+- **Plano antes, código depois da aprovação**: nenhuma linha de código antes de o usuário aprovar o plano em `plans/`.
+- **Nunca pule atualizações de status**: in progress ao começar a codar (após a aprovação), in review quando entregar.
 - **Nada de "pronto" sem abrir o navegador** quando houve mudança visual.
 - **Um status por vez**: se a issue ficar bloqueada (esperando design, endpoint inexistente, dúvida de UX), mova para "Blocked"/"Canceled" com comentário explicando.
 - Se a spec for ambígua, **pergunte antes** de assumir — não mude o status pra review com dúvidas em aberto.

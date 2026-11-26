@@ -1,7 +1,7 @@
 /**
  * Autor(es): Marcus Antonio Martinho Silva <marcus.antonio.martinho.silva@gmail.com>, Claude Code
  * Data Criação: 2026-11-19
- * Data Atualização: 2026-11-20
+ * Data Atualização: 2026-11-26
  * Descrição: Layout raiz do front-end Hermex. Define idioma, fontes (Inter, Exo 2 e Material
  *   Icons), metadados e o provider do Apollo Client para toda a aplicação.
  */
@@ -28,7 +28,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="pt-BR" className={`${fontVariables} h-full antialiased`}>
-      <body className="flex min-h-full flex-col">
+      {/* Extensões do navegador (ex.: ColorZilla) injetam atributos no <body> antes da hidratação;
+          a supressão vale só para o próprio <body>, não para os filhos. */}
+      <body className="flex min-h-full flex-col" suppressHydrationWarning>
         <ApolloWrapper>{children}</ApolloWrapper>
       </body>
     </html>

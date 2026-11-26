@@ -4,7 +4,7 @@
  * Data Atualização: 2026-11-25
  * Descrição: Seed do banco. Cria (ou atualiza) o usuário administrador inicial usando
  *   SEED_ADMIN_EMAIL e SEED_ADMIN_PASSWORD de apps/api/.env, e cadastra as categorias de
- *   veículos e os locais de exemplo. É idempotente. Executado com `pnpm db:seed`.
+ *   veículos, os locais e os veículos de exemplo. É idempotente. Executado com `pnpm db:seed`.
  */
 import 'dotenv/config';
 import { PrismaPg } from '@prisma/adapter-pg';
@@ -39,6 +39,74 @@ const LOCATIONS = [
     state: 'SP',
   },
 ];
+
+/** Veículos de exemplo (placas fictícias), sem imagem. */
+const VEHICLES = [
+  {
+    brand: 'Chevrolet',
+    model: 'Onix',
+    year: 2025,
+    licensePlate: 'HMX1A01',
+    dailyRate: '119.90',
+    transmission: 'MANUAL',
+    category: 'Hatch',
+  },
+  {
+    brand: 'Hyundai',
+    model: 'HB20',
+    year: 2026,
+    licensePlate: 'HMX1A02',
+    dailyRate: '139.90',
+    transmission: 'AUTOMATIC',
+    category: 'Hatch',
+  },
+  {
+    brand: 'Toyota',
+    model: 'Corolla',
+    year: 2026,
+    licensePlate: 'HMX1A03',
+    dailyRate: '229.90',
+    transmission: 'AUTOMATIC',
+    category: 'Sedan',
+  },
+  {
+    brand: 'Jeep',
+    model: 'Compass',
+    year: 2025,
+    licensePlate: 'HMX1A04',
+    dailyRate: '279.90',
+    transmission: 'AUTOMATIC',
+    category: 'SUV',
+  },
+  {
+    brand: 'Chevrolet',
+    model: 'Spin',
+    year: 2025,
+    licensePlate: 'HMX1A05',
+    dailyRate: '199.90',
+    transmission: 'AUTOMATIC',
+    category: 'Minivan',
+  },
+  {
+    brand: 'Fiat',
+    model: 'Strada',
+    year: 2026,
+    licensePlate: 'HMX1A06',
+    dailyRate: '169.90',
+    transmission: 'MANUAL',
+    category: 'Picape',
+  },
+  {
+    brand: 'Volkswagen',
+    model: 'Polo',
+    year: 2024,
+    licensePlate: 'HMX1A07',
+    dailyRate: '129.90',
+    transmission: 'MANUAL',
+    category: 'Hatch',
+    available: false,
+  },
+] as const;
 
 /**
  * Cria/atualiza o administrador.
@@ -98,6 +166,25 @@ async function seedLocations(): Promise<void> {
 }
 
 /**
+ * Cadastra os veículos de exemplo que ainda não existem (upsert pela placa, que é única),
+ * vinculando cada um à sua categoria. Depende de `seedCategories` já ter sido executado.
+ *
+ * @returns Promise resolvida ao final do cadastro.
+ * @throws {Error} Se o banco estiver inacessível ou a categoria do veículo não existir.
+ */
+async function seedVehicles(): Promise<void> {
+  for (const { category, ...vehicle } of VEHICLES) {
+    await prisma.vehicle.upsert({
+      where: { licensePlate: vehicle.licensePlate },
+      update: {},
+      create: { ...vehicle, category: { connect: { name: category } } },
+    });
+  }
+
+  console.warn(`Seed concluído: ${VEHICLES.length} veículos`);
+}
+
+/**
  * Executa todas as etapas do seed.
  *
  * @returns Promise resolvida ao final do seed.
@@ -107,6 +194,7 @@ async function main(): Promise<void> {
   await seedAdmin();
   await seedCategories();
   await seedLocations();
+  await seedVehicles();
 }
 
 main()

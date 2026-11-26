@@ -62,9 +62,15 @@ model Account {
   @@map("accounts")
 }
 
+/// Tipos de transmissão. Manter em sincronia com `Transmission` de @hermex/shared.
+enum Transmission {
+  MANUAL
+  AUTOMATIC
+}
+
 /// Veículo da frota da locadora.
 model Vehicle {
-  id           String   @id @default(uuid())
+  id           String       @id @default(uuid())
   /// Marca (ex.: Hyundai).
   brand        String
   /// Modelo (ex.: HB20).
@@ -72,21 +78,31 @@ model Vehicle {
   /// Ano do modelo.
   year         Int
   /// Placa do veículo, única na frota.
-  licensePlate String   @unique
+  licensePlate String       @unique
   /// Valor da diária em reais. Decimal para não perder centavos com ponto flutuante.
-  dailyRate    Decimal  @db.Decimal(10, 2)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  dailyRate    Decimal      @db.Decimal(10, 2)
+  /// URL da imagem exibida no card do veículo.
+  imageUrl     String?
+  transmission Transmission @default(MANUAL)
+  /// Indica se o veículo pode ser ofertado para locação.
+  available    Boolean      @default(true)
+  /// Opcional por ora, para não invalidar veículos já cadastrados.
+  categoryId   String?
+  category     Category?    @relation(fields: [categoryId], references: [id])
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 
+  @@index([categoryId])
   @@map("vehicles")
 }
 
 /// Categoria de veículo (ex.: SUV, Sedan).
 model Category {
-  id        String   @id @default(cuid())
-  name      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String    @id @default(cuid())
+  name      String    @unique
+  vehicles  Vehicle[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   @@map("categories")
 }
