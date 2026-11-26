@@ -2,7 +2,7 @@
 
 > **Status: IMPLEMENTADO** em 2026-11-26 (commit `8b80f1f`; plano aprovado na mesma data), conforme o workflow da skill `/plan-frontend-issue-from-linear`.
 > Branch: `aula-4` (a atual; sem branch nova).
-> Issue: [HRMX-7](https://linear.app/mmartinho/issue/HRMX-7) — **In Review**, prioridade High, milestone Frontend, projeto Home Page.
+> Issue: [HRMX-7](https://linear.app/mmartinho/issue/HRMX-7) — **Done** (2026-11-26, a pedido do usuário), prioridade High, milestone Frontend, projeto Home Page.
 >
 > **Nota:** uma primeira implementação foi feita antes deste plano, fora do fluxo, e guardada em `git stash`.
 > Após a aprovação ela foi reaplicada (conferida contra o plano) e verificada novamente.
